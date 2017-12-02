@@ -7,7 +7,23 @@ import (
 )
 
 func main() {
-	fmt.Println(solve1(os.Args[1]))
+	// fmt.Println(solve1(os.Args[1]))
+	fmt.Println(solve2(os.Args[1]))
+}
+
+func solve2(captcha string) int {
+	l := len(captcha)
+	offset := l / 2
+	sum := 0
+
+	for i := 0; i < l; i++ {
+		c := getIntAt(captcha, i)
+		cpp := getIntAt(captcha, (i+offset)%l)
+		if c == cpp {
+			sum += c
+		}
+	}
+	return sum
 }
 
 func solve1(captcha string) int {
