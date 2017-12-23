@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestStep(t *testing.T) {
+func TestStep1(t *testing.T) {
 	input := []int{0, 3, 0, 1, -3}
 	cursors := []int{
 		0,
@@ -25,7 +25,7 @@ func TestStep(t *testing.T) {
 	}
 
 	for i := 1; i < len(steps); i++ {
-		cursor, done := step(input, cursors[i-1])
+		cursor, done := step1(input, cursors[i-1])
 		assert.Equal(t, steps[i], input)
 		assert.Equal(t, cursors[i], cursor)
 		assert.Equal(t, i == 5, done)
@@ -39,4 +39,13 @@ func TestSolve1(t *testing.T) {
 1
 -3`
 	assert.Equal(t, solve1(input), 5)
+}
+
+func TestSolve2(t *testing.T) {
+	input := `0
+3
+0
+1
+-3`
+	assert.Equal(t, solve2(input), 10)
 }
