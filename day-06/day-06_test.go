@@ -5,6 +5,11 @@ import (
 	"testing"
 )
 
+func TestSolve2(t *testing.T) {
+	input := []string{"0", "2", "7", "0"}
+	assert.Equal(t, solve2(input), 4)
+}
+
 func TestSolve1(t *testing.T) {
 	input := []string{"0", "2", "7", "0"}
 	assert.Equal(t, solve1(input), 5)

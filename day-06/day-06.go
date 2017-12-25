@@ -8,7 +8,26 @@ import (
 )
 
 func main() {
-	fmt.Println(solve1(os.Args[1:]))
+	// fmt.Println(solve1(os.Args[1:]))
+	fmt.Println(solve2(os.Args[1:]))
+}
+
+func solve2(input []string) int {
+	var banks []int
+	for _, i := range input {
+		b, _ := strconv.Atoi(i)
+		banks = append(banks, b)
+	}
+
+	results := map[string]int{}
+	for i := 0; ; i++ {
+		h := hash(banks)
+		if _, found := results[h]; found {
+			return i - results[h]
+		}
+		step(banks)
+		results[h] = i
+	}
 }
 
 func solve1(input []string) int {
