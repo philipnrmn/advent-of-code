@@ -21,8 +21,12 @@ type condition struct {
 	value    int
 }
 
+// biggest tracks the largest value recorded by exec()
+var biggest int
+
 func main() {
-	fmt.Println(solve1(os.Args[1]))
+	// fmt.Println(solve1(os.Args[1]))
+	fmt.Println(solve2(os.Args[1]))
 }
 
 func solve1(input string) int {
@@ -41,6 +45,17 @@ func solve1(input string) int {
 	}
 
 	return big
+}
+
+func solve2(input string) int {
+	lines := strings.Split(input, "\n")
+	registers := map[string]int{}
+	for _, l := range lines {
+		instr := parse(l)
+		registers = exec(instr, registers)
+	}
+
+	return biggest
 }
 
 // parse returns an instruction from a string
@@ -72,6 +87,11 @@ func exec(i instruction, r map[string]int) map[string]int {
 		r[i.register] += i.amount
 	case "dec":
 		r[i.register] -= i.amount
+	}
+
+	// specific to part 2
+	if r[i.register] > biggest {
+		biggest = r[i.register]
 	}
 
 	return r
