@@ -10,3 +10,9 @@ func TestSolve1(t *testing.T) {
 	o := 12
 	assert.Equal(t, o, solve1(i))
 }
+
+func TestSolve2(t *testing.T) {
+	i := "abcde fghij klmno pqrst fguij axcye wvxyz"
+	o := "fgij"
+	assert.Equal(t, o, solve2(i))
+}

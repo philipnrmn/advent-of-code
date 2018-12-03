@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	fmt.Println(solve1(os.Args[1]))
+	// fmt.Println(solve1(os.Args[1]))
+	fmt.Println(solve2(os.Args[1]))
 }
 
 func solve1(input string) int {
@@ -33,4 +34,25 @@ func solve1(input string) int {
 	}
 
 	return doubles * triples
+}
+
+func solve2(input string) string {
+	result := ""
+	for j, id1 := range strings.Fields(input) {
+		for k, id2 := range strings.Fields(input) {
+			if j == k {
+				continue
+			}
+			common := ""
+			for i := 0; i < len(id1); i++ {
+				if id1[i] == id2[i] {
+					common += string(id1[i])
+				}
+			}
+			if len(common) > len(result) {
+				result = common
+			}
+		}
+	}
+	return result
 }
