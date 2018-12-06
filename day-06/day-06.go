@@ -8,7 +8,8 @@ import (
 )
 
 func main() {
-	fmt.Println(solve1(os.Args[1]))
+	// fmt.Println(solve1(os.Args[1]))
+	fmt.Println(solve2(os.Args[1], 10000))
 }
 
 type coord struct {
@@ -59,6 +60,37 @@ func solve1(input string) int {
 
 }
 
+func solve2(input string, limit int) int {
+	lines := strings.Split(input, "\n")
+	coords := make([]coord, len(lines))
+	for i, l := range lines {
+		coords[i] = makeCoord(l)
+	}
+
+	top, right, bottom, left := boundsOf(coords)
+
+	grid := make([][]bool, bottom)
+	for y := top; y < bottom; y++ {
+		grid[y] = make([]bool, right)
+		for x := left; x < right; x++ {
+			grid[y][x] = distanceToAll(coords, x, y) < limit
+		}
+		// fmt.Println(grid[y])
+	}
+
+	area := 0
+	for y := top; y < bottom; y++ {
+		for x := left; x < right; x++ {
+			if grid[y][x] {
+				area++
+			}
+		}
+	}
+
+	return area
+
+}
+
 func makeCoord(line string) coord {
 	xy := strings.Split(line, ", ")
 	x, _ := strconv.Atoi(xy[0])
@@ -106,6 +138,15 @@ func findNearest(coords []coord, x int, y int) string {
 	}
 	if equidistant {
 		return "..."
+	}
+	return result
+}
+
+func distanceToAll(coords []coord, x int, y int) int {
+	result := 0
+	for _, c := range coords {
+		distance := abs(c.cx-x) + abs(c.cy-y)
+		result += distance
 	}
 	return result
 }
