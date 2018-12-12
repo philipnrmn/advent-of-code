@@ -7,7 +7,8 @@ import (
 )
 
 func main() {
-	fmt.Println(solve1(os.Args[1], os.Args[2], 20))
+	// fmt.Println(solve1(os.Args[1], os.Args[2], 20))
+	fmt.Println(solve2(os.Args[1], os.Args[2], 50000000000))
 }
 
 func solve1(i1, i2 string, gen int) int {
@@ -35,6 +36,52 @@ func solve1(i1, i2 string, gen int) int {
 	printGen(state, -2, 32)
 
 	return sum(state, zero)
+}
+
+func solve2(i1, i2 string, gen int) int {
+	rules := make(map[byte]bool)
+	for _, s := range strings.Split(i1, "\n") {
+		pattern := strtob(s[0:5])
+		rules[pattern] = s[9] == '#'
+	}
+
+	state := make([]bool, len(i2))
+	for i, r := range i2 {
+		state[i] = r == '#'
+	}
+
+	// track the zeroth element (state will grow!)
+	zero := 0
+
+	for i := 0; i < gen; i++ {
+		// fmt.Printf("%2d: ", i)
+		// printGen(state, -zero, 32)
+		fmt.Println(i, " score: ", sum(state, zero))
+		zero += 2
+		state = iterate(rules, state)
+		state, zero = trim(state, zero)
+	}
+	fmt.Printf("%2d: ", gen)
+	printGen(state, -2, 32)
+
+	return sum(state, zero)
+}
+
+func trim(state []bool, zero int) ([]bool, int) {
+	var start, end int
+	for i := range state {
+		if state[i] {
+			start = i
+			break
+		}
+	}
+	for i := len(state) - 1; i >= 0; i-- {
+		if state[i] {
+			end = i + 1
+			break
+		}
+	}
+	return state[start:end], zero - start
 }
 
 func iterate(rules map[byte]bool, state []bool) []bool {
