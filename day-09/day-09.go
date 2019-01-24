@@ -27,9 +27,10 @@ func solve1(i1, i2 string) int {
 			elves[elf] += i
 			rr = rr.Prev().Prev().Prev().Prev().Prev().Prev().Prev().Prev()
 			elves[elf] += rr.Value.(int)
-			fmt.Printf("Elf %d gets %d+%d\n", elf+1, i, rr.Value.(int))
+			// fmt.Printf("Elf %d gets %d+%d\n", elf+1, i, rr.Value.(int))
+			rr = rr.Prev()
 			rr.Unlink(1)
-			rr = rr.Next()
+			rr = rr.Next().Next()
 		} else {
 			s := ring.New(1)
 			s.Value = i
@@ -37,8 +38,8 @@ func solve1(i1, i2 string) int {
 			rr = rr.Next().Next()
 		}
 
-		fmt.Printf("[%d] ", elf+1)
-		printRing(r)
+		// fmt.Printf("[%d] ", elf+1)
+		// printRing(r)
 		elf = (elf + 1) % n
 	}
 
@@ -51,7 +52,7 @@ func solve1(i1, i2 string) int {
 		}
 	}
 
-	fmt.Println(elves)
+	// fmt.Println(elves)
 
 	fmt.Printf("Elf %d won with %d\n", hiElf+1, highest)
 	return highest
