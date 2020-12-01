@@ -15,7 +15,7 @@ type Solution func([]int) (int, error)
 
 func Solve(day int, s ...Solution) {
 	if len(os.Args) < 2 {
-		barf("Usage: go run day-<day>.go <part>")
+		barf("Usage: go run day-<day>/main.go <part>")
 	}
 
 	var part int
@@ -25,7 +25,7 @@ func Solve(day int, s ...Solution) {
 	}
 
 	var input []int
-	filename := fmt.Sprintf("day-%02d.txt", day)
+	filename := fmt.Sprintf("day-%02d/input", day)
 
 	var file *os.File
 	if file, err = os.Open(filename); err != nil {

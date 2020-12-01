@@ -3,7 +3,7 @@ package main
 import (
 	"sort"
 
-	. "./lib"
+	. "../lib"
 )
 
 func part1(input []int) (int, error) {
