@@ -5,7 +5,9 @@ import (
 	"errors"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strconv"
+	"strings"
 )
 
 var NYI = errors.New("Not yet implemented")
@@ -48,7 +50,13 @@ func readInput(day int) ([]int, error) {
 	var input []int
 	var err error
 
-	filename := fmt.Sprintf("day-%02d/input", day)
+	var filename string
+	cwd, _ := os.Getwd()
+	if strings.HasPrefix(filepath.Base(cwd), "day-") {
+		filename = "input"
+	} else {
+		filename = fmt.Sprintf("day-%02d/input", day)
+	}
 
 	var file *os.File
 	if file, err = os.Open(filename); err != nil {
