@@ -25,21 +25,8 @@ func Solve(day int, s ...Solution) {
 	}
 
 	var input []int
-	filename := fmt.Sprintf("day-%02d/input", day)
-
-	var file *os.File
-	if file, err = os.Open(filename); err != nil {
+	if input, err = readInput(day); err != nil {
 		barf(err)
-	}
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		line := scanner.Text()
-		var n int
-		if n, err = strconv.Atoi(line); err != nil {
-			barf("A line in ", filename, " was not an int", err)
-		}
-		input = append(input, n)
 	}
 
 	fmt.Printf("Solving day %d part %d...\n", day, part)
@@ -55,4 +42,28 @@ func Solve(day int, s ...Solution) {
 func barf(err ...interface{}) {
 	fmt.Fprintln(os.Stderr, err...)
 	os.Exit(1)
+}
+
+func readInput(day int) ([]int, error) {
+	var input []int
+	var err error
+
+	filename := fmt.Sprintf("day-%02d/input", day)
+
+	var file *os.File
+	if file, err = os.Open(filename); err != nil {
+		return input, err
+	}
+
+	scanner := bufio.NewScanner(file)
+	for scanner.Scan() {
+		line := scanner.Text()
+		var n int
+		if n, err = strconv.Atoi(line); err != nil {
+			return input, fmt.Errorf("A line in %s was not an int: %s", filename, err)
+		}
+		input = append(input, n)
+	}
+
+	return input, nil
 }
