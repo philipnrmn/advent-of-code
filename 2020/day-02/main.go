@@ -23,7 +23,17 @@ func part1(input []string) (int, error) {
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	valid := 0
+
+	for _, line := range input {
+		a, b, char, pwd := parse(line)
+		rpwd := []rune(pwd)
+
+		if xor(rpwd[a-1] == char, rpwd[b-1] == char) {
+			valid++
+		}
+	}
+	return valid, nil
 }
 
 func parse(input string) (int, int, rune, string) {
@@ -47,6 +57,10 @@ func count(input string) map[rune]int {
 		}
 	}
 	return result
+}
+
+func xor(a, b bool) bool {
+	return (a && !b) || (b && !a)
 }
 
 func main() {

@@ -20,9 +20,12 @@ func Test_part1(t *testing.T) {
 }
 
 func Test_part2(t *testing.T) {
-	_, err := part2(i)
+	o, err := part2(i)
 	if err != nil {
 		t.Error(err)
+	}
+	if o != 1 {
+		t.Errorf("Bad count: %d", o)
 	}
 }
 
