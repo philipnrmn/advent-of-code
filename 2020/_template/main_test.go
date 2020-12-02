@@ -2,7 +2,7 @@ package main
 
 import "testing"
 
-var i = []int{}
+var i = []string{}
 
 func Test_part1(t *testing.T) {
 	_, err := part1(i)

@@ -2,11 +2,11 @@ package main
 
 import . "../lib"
 
-func part1(input []int) (int, error) {
+func part1(input []string) (int, error) {
 	return 0, NYI
 }
 
-func part2(input []int) (int, error) {
+func part2(input []string) (int, error) {
 	return 0, NYI
 }
 

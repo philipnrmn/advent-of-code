@@ -45,5 +45,5 @@ func part2(input []int) (int, error) {
 }
 
 func main() {
-	Solve(1, part1, part2)
+	Solve(1, WithInts(part1), WithInts(part2))
 }

@@ -13,7 +13,8 @@ import (
 var NYI = errors.New("Not yet implemented")
 var NOPE = errors.New("Did not find a solution")
 
-type Solution func([]int) (int, error)
+type Solution func([]string) (int, error)
+type ISolution func([]int) (int, error)
 
 func Solve(day int, s ...Solution) {
 	if len(os.Args) < 2 {
@@ -26,7 +27,7 @@ func Solve(day int, s ...Solution) {
 		barf("Bad value for part", err)
 	}
 
-	var input []int
+	var input []string
 	if input, err = readInput(day); err != nil {
 		barf(err)
 	}
@@ -46,8 +47,8 @@ func barf(err ...interface{}) {
 	os.Exit(1)
 }
 
-func readInput(day int) ([]int, error) {
-	var input []int
+func readInput(day int) ([]string, error) {
+	var input []string
 	var err error
 
 	var filename string
@@ -66,12 +67,32 @@ func readInput(day int) ([]int, error) {
 	scanner := bufio.NewScanner(file)
 	for scanner.Scan() {
 		line := scanner.Text()
+		input = append(input, line)
+	}
+
+	return input, nil
+}
+
+func WithInts(s ISolution) Solution {
+	return func(raw []string) (int, error) {
+		input, err := icast(raw)
+		if err != nil {
+			barf(err)
+		}
+		return s(input)
+	}
+}
+
+func icast(raw []string) ([]int, error) {
+	var input []int
+
+	for _, r := range raw {
+		var err error
 		var n int
-		if n, err = strconv.Atoi(line); err != nil {
-			return input, fmt.Errorf("A line in %s was not an int: %s", filename, err)
+		if n, err = strconv.Atoi(r); err != nil {
+			return input, fmt.Errorf("Could not cast to int: %s", err)
 		}
 		input = append(input, n)
 	}
-
 	return input, nil
 }
