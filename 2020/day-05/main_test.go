@@ -20,13 +20,6 @@ func Test_part1(t *testing.T) {
 	}
 }
 
-func Test_part2(t *testing.T) {
-	_, err := part2(i)
-	if err != nil {
-		t.Error(err)
-	}
-}
-
 func Benchmark_part1(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		part1(i)
