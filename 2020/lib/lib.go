@@ -96,3 +96,20 @@ func icast(raw []string) ([]int, error) {
 	}
 	return input, nil
 }
+
+func Chunk(raw []string) [][]string {
+	var chunks [][]string
+	var chunk []string
+	for _, s := range raw {
+		if len(s) > 0 {
+			chunk = append(chunk, s)
+		} else if len(chunk) > 0 {
+			chunks = append(chunks, chunk)
+			chunk = []string{}
+		}
+	}
+	if len(chunk) > 0 {
+		return append(chunks, chunk)
+	}
+	return chunks
+}
