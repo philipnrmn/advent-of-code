@@ -6,7 +6,8 @@ import (
 	. "../lib"
 )
 
-func part1(input []int) (int, error) {
+func part1(raw []string) (int, error) {
+	input := Ints(raw)
 	sort.Ints(input)
 	for i := 0; i < len(input); i++ {
 		n := input[i]
@@ -23,7 +24,8 @@ func part1(input []int) (int, error) {
 	return 0, NOPE
 }
 
-func part2(input []int) (int, error) {
+func part2(raw []string) (int, error) {
+	input := Ints(raw)
 	sort.Ints(input)
 	for i := 0; i < len(input); i++ {
 		n := input[i]
@@ -45,5 +47,5 @@ func part2(input []int) (int, error) {
 }
 
 func main() {
-	Solve(1, WithInts(part1), WithInts(part2))
+	Solve(1, part1, part2)
 }

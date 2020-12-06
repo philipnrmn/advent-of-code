@@ -5,6 +5,15 @@ import (
 	"testing"
 )
 
+func Test_Ints(t *testing.T) {
+	i := []string{"1", "234", "567890"}
+	e := []int{1, 234, 567890}
+	o := Ints(i)
+	if !reflect.DeepEqual(e, o) {
+		t.Errorf("Expected %v, got %v", e, o)
+	}
+}
+
 func Test_Chunk(t *testing.T) {
 	i := []string{
 		"1", "",

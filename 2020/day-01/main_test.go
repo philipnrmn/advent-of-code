@@ -2,15 +2,16 @@ package main
 
 import "testing"
 
+var i = []string{
+	"1721",
+	"979",
+	"366",
+	"299",
+	"675",
+	"1456",
+}
+
 func Test_part1(t *testing.T) {
-	i := []int{
-		1721,
-		979,
-		366,
-		299,
-		675,
-		1456,
-	}
 	o, err := part1(i)
 	if err != nil {
 		t.Error(err)
@@ -21,8 +22,7 @@ func Test_part1(t *testing.T) {
 	}
 }
 
-func Benchmark_part1(b *testing.B) {
-	i := []int{1721, 979, 366, 299, 675, 1456}
+func Benchmark_part2(b *testing.B) {
 	for n := 0; n < b.N; n++ {
 		part2(i)
 	}

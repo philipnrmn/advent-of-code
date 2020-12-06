@@ -73,28 +73,18 @@ func readInput(day int) ([]string, error) {
 	return input, nil
 }
 
-func WithInts(s ISolution) Solution {
-	return func(raw []string) (int, error) {
-		input, err := icast(raw)
-		if err != nil {
-			barf(err)
-		}
-		return s(input)
-	}
-}
-
-func icast(raw []string) ([]int, error) {
+func Ints(raw []string) []int {
 	var input []int
 
 	for _, r := range raw {
 		var err error
 		var n int
 		if n, err = strconv.Atoi(r); err != nil {
-			return input, fmt.Errorf("Could not cast to int: %s", err)
+			barf("Could not cast to int", err)
 		}
 		input = append(input, n)
 	}
-	return input, nil
+	return input
 }
 
 func Chunk(raw []string) [][]string {
