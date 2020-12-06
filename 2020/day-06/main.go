@@ -9,20 +9,39 @@ func part1(input []string) (int, error) {
 	chunks := Chunk(input)
 
 	for _, chunk := range chunks {
-		m := map[rune]int{}
-		for _, line := range chunk {
-			for _, r := range line {
-				m[r] = 1
-			}
-		}
-		sum += len(m)
+		sum += len(count(chunk))
 	}
 
 	return sum, nil
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	var sum int
+	chunks := Chunk(input)
+
+	for _, chunk := range chunks {
+		for _, i := range count(chunk) {
+			if i == len(chunk) {
+				sum++
+			}
+		}
+	}
+
+	return sum, nil
+}
+
+func count(chunk []string) map[rune]int {
+	m := map[rune]int{}
+	for _, line := range chunk {
+		for _, r := range line {
+			if _, ok := m[r]; ok {
+				m[r] += 1
+			} else {
+				m[r] = 1
+			}
+		}
+	}
+	return m
 }
 
 func main() {
