@@ -21,7 +21,12 @@ func part1(input []string) (int, error) {
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	rules := map[string]map[string]int{}
+	for _, line := range input {
+		o, ii := parse(line)
+		rules[o] = ii
+	}
+	return countChildren("shiny gold", rules), nil
 }
 
 func parse(input string) (string, map[string]int) {
@@ -47,6 +52,14 @@ func parents(colour string, rules map[string]map[string]int) map[string]bool {
 	}
 
 	return results
+}
+
+func countChildren(colour string, rules map[string]map[string]int) int {
+	var sum int
+	for o, s := range rules[colour] {
+		sum += s + s*countChildren(o, rules)
+	}
+	return sum
 }
 
 func main() {
