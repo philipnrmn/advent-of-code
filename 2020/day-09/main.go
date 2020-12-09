@@ -1,6 +1,8 @@
 package main
 
 import (
+	"sort"
+
 	. "../lib"
 )
 
@@ -29,8 +31,30 @@ func part1(raw []string) (int, error) {
 	return 0, NOPE
 }
 
-func part2(input []string) (int, error) {
-	return 0, NYI
+func part2(raw []string) (int, error) {
+	invalid, _ := part1(raw)
+	input := Ints(raw)
+	for i := 0; i < len(input); i++ {
+		for j := i + 1; j < len(input); j++ {
+			candidate := input[i:j]
+			if sum(candidate) == invalid {
+				sort.Ints(candidate)
+				return candidate[0] + candidate[len(candidate)-1], nil
+			}
+		}
+	}
+	return 0, NOPE
+}
+
+func sum(s []int) int {
+	if len(s) == 0 {
+		return 0
+	}
+	result := s[0]
+	for i := 1; i < len(s); i++ {
+		result += s[i]
+	}
+	return result
 }
 
 func main() {
