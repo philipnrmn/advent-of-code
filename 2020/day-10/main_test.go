@@ -28,7 +28,7 @@ func Test_part1(t *testing.T) {
 }
 
 func Test_part2(t *testing.T) {
-	e := 0
+	e := 8
 	o, err := part2(i)
 	if err != nil {
 		t.Error(err)
