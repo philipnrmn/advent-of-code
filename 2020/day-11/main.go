@@ -6,10 +6,14 @@ import (
 	. "../lib"
 )
 
+type strategy func([]string, int, int) int
+
+var tolerance = 4
+
 func part1(state []string) (int, error) {
 	var stable bool
 	for {
-		state, stable = iterate(state)
+		state, stable = iterate(state, countAdjacent, 4)
 		if stable {
 			break
 		}
@@ -23,18 +27,18 @@ func part1(state []string) (int, error) {
 	return occupied, nil
 }
 
-func iterate(state []string) ([]string, bool) {
+func iterate(state []string, count strategy, tolerance int) ([]string, bool) {
 	stable := true
 	newState := make([]string, len(state))
 	for i := 0; i < len(state); i++ {
 		for j := 0; j < len(state[i]); j++ {
-			adj := countAdjacent(state, i, j)
+			c := count(state, i, j)
 			n := state[i][j]
-			if n == 'L' && adj == 0 {
+			if n == 'L' && c == 0 {
 				n = '#'
 				stable = false
 			}
-			if n == '#' && adj >= 4 {
+			if n == '#' && c >= tolerance {
 				n = 'L'
 				stable = false
 			}
@@ -59,6 +63,35 @@ func countAdjacent(state []string, y, x int) int {
 	return count
 }
 
+func countVisible(state []string, y, x int) int {
+	visible := []byte{
+		find(state, y, x, -1, -1), find(state, y, x, -1, 0), find(state, y, x, -1, 1),
+		find(state, y, x, 0, -1), find(state, y, x, 0, 1),
+		find(state, y, x, 1, -1), find(state, y, x, 1, 0), find(state, y, x, 1, 1),
+	}
+	count := 0
+	for _, r := range visible {
+		if r == '#' {
+			count++
+		}
+	}
+	return count
+
+}
+
+func find(state []string, y, x, vy, vx int) byte {
+	for {
+		x += vx
+		y += vy
+		if x < 0 || y < 0 || x >= len(state[0]) || y >= len(state) {
+			return '.'
+		}
+		if state[y][x] != '.' {
+			return state[y][x]
+		}
+	}
+}
+
 func at(state []string, y, x int) byte {
 	if x < 0 || y < 0 || x >= len(state[0]) || y >= len(state) {
 		return '.'
@@ -66,8 +99,21 @@ func at(state []string, y, x int) byte {
 	return state[y][x]
 }
 
-func part2(input []string) (int, error) {
-	return 0, NYI
+func part2(state []string) (int, error) {
+	var stable bool
+	for {
+		state, stable = iterate(state, countVisible, 5)
+		if stable {
+			break
+		}
+	}
+
+	occupied := 0
+	for _, row := range state {
+		occupied += strings.Count(row, "#")
+	}
+
+	return occupied, nil
 }
 
 func main() {
