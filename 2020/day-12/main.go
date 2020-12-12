@@ -28,7 +28,23 @@ func part1(input []string) (int, error) {
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	var x, y int
+	wx, wy := 10, -1
+	for _, line := range input {
+		d, n := parse(line)
+		switch d {
+		case 'L':
+			wx, wy = rotate(wx, wy, -n)
+		case 'R':
+			wx, wy = rotate(wx, wy, n)
+		case 'F':
+			x += wx * n
+			y += wy * n
+		case 'N', 'E', 'S', 'W':
+			wx, wy = move(wx, wy, compass[d], n)
+		}
+	}
+	return abs(x) + abs(y), nil
 }
 
 func parse(input string) (byte, int) {
@@ -66,6 +82,23 @@ func turn(v, n int) int {
 		return v - 360
 	}
 	return v
+}
+
+func rotate(x, y, v int) (int, int) {
+	if v < 0 {
+		v = 360 + v
+	}
+	switch v {
+	case 0:
+		return x, y
+	case 90:
+		return -y, x
+	case 180:
+		return -x, -y
+	case 270:
+		return y, -x
+	}
+	return -1, -1
 }
 
 func main() {
