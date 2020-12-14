@@ -1,8 +1,10 @@
 package main
 
 import (
+	"fmt"
 	"regexp"
 	"strconv"
+	"strings"
 
 	. "../lib"
 )
@@ -26,7 +28,23 @@ func part1(input []string) (int, error) {
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	var result int
+	rgst := map[int]int{}
+	for _, c := range chunk(input) {
+		pattern, instr := parse(c)
+		masks := floatMasks(pattern)
+
+		for _, i := range instr {
+			adr, val := i[0], i[1]
+			for _, mask := range masks {
+				rgst[masked(adr, mask)] = val
+			}
+		}
+	}
+	for _, v := range rgst {
+		result += v
+	}
+	return result, nil
 }
 
 func chunk(input []string) [][]string {
@@ -72,6 +90,33 @@ func masked(val int, mask string) int {
 		}
 	}
 	return result
+}
+
+func floatMasks(pattern string) []string {
+	xCount := strings.Count(pattern, "X")
+	limit := 1 << xCount
+	masks := make([]string, limit)
+
+	for i := 0; i < limit; i++ {
+		mask := make([]byte, len(pattern))
+		// I'm so ashamed
+		subs := fmt.Sprintf("%036b", i)
+		var n int
+		for j := 0; j < len(pattern); j++ {
+			switch pattern[j] {
+			case 'X':
+				mask[j] = subs[35-n]
+				n++
+			case '0':
+				mask[j] = 'X'
+			case '1':
+				mask[j] = '1'
+			}
+		}
+		masks[i] = string(mask)
+	}
+
+	return masks
 }
 
 func main() {
