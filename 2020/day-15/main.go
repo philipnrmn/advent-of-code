@@ -8,13 +8,21 @@ import (
 )
 
 func part1(input []string) (int, error) {
-	turns := parse(input)
+	return findN(parse(input), 2020), nil
+}
+
+func part2(input []string) (int, error) {
+	return findN(parse(input), 30000000), nil
+}
+
+func findN(start []int, nth int) int {
+	turns := start
 	index := map[int][]int{}
 	for i, t := range turns {
 		addIndex(&index, t, i)
 	}
 
-	for i := len(turns); i < 2020; i++ {
+	for i := len(turns); i < nth; i++ {
 		occ := index[turns[len(turns)-1]]
 		n := 0
 		if len(occ) > 1 {
@@ -23,11 +31,7 @@ func part1(input []string) (int, error) {
 		turns = append(turns, n)
 		addIndex(&index, n, i)
 	}
-	return turns[len(turns)-1], nil
-}
-
-func part2(input []string) (int, error) {
-	return 0, NYI
+	return turns[len(turns)-1]
 }
 
 func parse(input []string) []int {
