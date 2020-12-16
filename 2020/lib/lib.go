@@ -77,12 +77,7 @@ func Ints(raw []string) []int {
 	var input []int
 
 	for _, r := range raw {
-		var err error
-		var n int
-		if n, err = strconv.Atoi(r); err != nil {
-			barf("Could not cast to int", err)
-		}
-		input = append(input, n)
+		input = append(input, ToInt(r))
 	}
 	return input
 }
@@ -102,4 +97,24 @@ func Chunk(raw []string) [][]string {
 		return append(chunks, chunk)
 	}
 	return chunks
+}
+
+func CsvInts(raw []string) [][]int {
+	var rows [][]int
+	for _, r := range raw {
+		var row []int
+		for _, v := range strings.Split(r, ",") {
+			row = append(row, ToInt(v))
+		}
+		rows = append(rows, row)
+	}
+	return rows
+}
+
+func ToInt(raw string) int {
+	result, err := strconv.Atoi(raw)
+	if err != nil {
+		barf("Could not cast to int", err)
+	}
+	return result
 }
