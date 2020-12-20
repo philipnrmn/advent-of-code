@@ -1,12 +1,23 @@
 package main
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 var i = []string{
 	"2 * 3 + (4 * 5)",
 	"5 + (8 * 3 + 9 + 3 * 4 * 3)",
 	"5 * 9 * (7 * 3 * 3 + 9 * 3 + (8 + 6 * 4))",
 	"((2 + 4 * 9) * (6 + 9 * 8 + 6) + 6) + 2 + 4 * 2",
+}
+
+func Test_tokenize(t *testing.T) {
+	e := []string{"2", "*", "3", "+", "(", "4", "*", "5", ")"}
+	o := tokenize(i[0])
+	if !reflect.DeepEqual(e, o) {
+		t.Errorf("Expected %v, got %v", e, o)
+	}
 }
 
 func Test_part1(t *testing.T) {
