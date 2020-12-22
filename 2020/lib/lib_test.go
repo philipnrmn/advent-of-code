@@ -31,3 +31,27 @@ func Test_Chunk(t *testing.T) {
 		t.Errorf("Expected %v, got %v", e, o)
 	}
 }
+
+func Test_StringSet(t *testing.T) {
+	ss := NewStringSet()
+	o := ss.ToSlice()
+	e := []string{}
+	if !reflect.DeepEqual(e, o) {
+		t.Errorf("Expected %v, got %v", e, o)
+	}
+
+	ss.Append("foo", "bar")
+	o = ss.ToSlice()
+	e = []string{"foo", "bar"}
+	if !reflect.DeepEqual(e, o) {
+		t.Errorf("Expected %v, got %v", e, o)
+	}
+
+	ss = NewStringSet("baz", "qux")
+	o = ss.ToSlice()
+	e = []string{"baz", "qux"}
+	if !reflect.DeepEqual(e, o) {
+		t.Errorf("Expected %v, got %v", e, o)
+	}
+
+}

@@ -118,3 +118,56 @@ func ToInt(raw string) int {
 	}
 	return result
 }
+
+type StringSet struct {
+	contents map[string]bool
+}
+
+func NewStringSet(ss ...string) *StringSet {
+	contents := map[string]bool{}
+	for _, s := range ss {
+		contents[s] = true
+	}
+	return &StringSet{contents}
+}
+
+func (set *StringSet) Append(ss ...string) {
+	for _, s := range ss {
+		set.contents[s] = true
+	}
+}
+
+func (set *StringSet) Contains(s string) bool {
+	return set.contents[s]
+}
+
+func (set *StringSet) ToSlice() []string {
+	result := make([]string, len(set.contents))
+	i := 0
+	for k, _ := range set.contents {
+		result[i] = k
+		i++
+	}
+	return result
+}
+
+func IntersectStringSet(a, b *StringSet) *StringSet {
+	contents := map[string]bool{}
+	for k, v := range a.contents {
+		if v && b.contents[k] {
+			contents[k] = true
+		}
+	}
+	return &StringSet{contents}
+}
+
+func UnionStringSet(a, b *StringSet) *StringSet {
+	contents := map[string]bool{}
+	for k, v := range a.contents {
+		contents[k] = v
+	}
+	for k, v := range b.contents {
+		contents[k] = v
+	}
+	return &StringSet{contents}
+}
