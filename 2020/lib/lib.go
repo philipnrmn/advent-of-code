@@ -137,8 +137,18 @@ func (set *StringSet) Append(ss ...string) {
 	}
 }
 
+func (set *StringSet) Delete(ss ...string) {
+	for _, s := range ss {
+		delete(set.contents, s)
+	}
+}
+
 func (set *StringSet) Contains(s string) bool {
 	return set.contents[s]
+}
+
+func (set *StringSet) Len() int {
+	return len(set.contents)
 }
 
 func (set *StringSet) ToSlice() []string {
