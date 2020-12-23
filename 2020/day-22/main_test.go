@@ -1,6 +1,9 @@
 package main
 
-import "testing"
+import (
+	"testing"
+	"time"
+)
 
 var i = []string{
 	"Player 1:",
@@ -30,7 +33,7 @@ func Test_part1(t *testing.T) {
 }
 
 func Test_part2(t *testing.T) {
-	e := 0
+	e := 291
 	o, err := part2(i)
 	if err != nil {
 		t.Error(err)
@@ -38,6 +41,21 @@ func Test_part2(t *testing.T) {
 	if o != e {
 		t.Errorf("Expected %d, got %d", e, o)
 	}
+}
+
+func Test_recurse(t *testing.T) {
+	timeout := time.After(100 * time.Millisecond)
+	done := make(chan bool)
+	go func() {
+		recurse([]int{43, 19}, []int{2, 29, 14})
+		done <- true
+	}()
+	select {
+	case <-timeout:
+		t.Error("Timed out")
+	case <-done:
+	}
+
 }
 
 func Benchmark_part1(b *testing.B) {

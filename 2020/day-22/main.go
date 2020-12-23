@@ -1,6 +1,7 @@
 package main
 
 import (
+	"reflect"
 	"strconv"
 
 	. "../lib"
@@ -12,30 +13,79 @@ func part1(input []string) (int, error) {
 		if len(p1) == 0 || len(p2) == 0 {
 			break
 		}
-		// hopefully we never draw?
-		if p1[0] > p2[0] {
-			p1 = append(p1[1:], p1[0], p2[0])
-			p2 = p2[1:]
-		} else {
-			p2 = append(p2[1:], p2[0], p1[0])
-			p1 = p1[1:]
-		}
+		p1, p2 = play(p1, p2)
 	}
 
-	winner := p1
 	if len(p2) > len(p1) {
-		winner = p2
+		return score(p2), nil
 	}
-
-	result := 0
-	for i := 1; i <= len(winner); i++ {
-		result += winner[len(winner)-i] * i
-	}
-	return result, nil
+	return score(p1), nil
 }
 
 func part2(input []string) (int, error) {
-	return 0, NYI
+	p1, p2 := parse(input)
+	p1, p2 = recurse(p1, p2)
+
+	if len(p2) > len(p1) {
+		return score(p2), nil
+	}
+	return score(p1), nil
+}
+
+func recurse(p1, p2 []int) ([]int, []int) {
+	cache := [][][]int{}
+	for {
+		round := [][]int{p1, p2}
+		for i := range cache {
+			if reflect.DeepEqual(round, cache[i]) {
+				return p1, []int{}
+			}
+		}
+		cache = append(cache, round)
+
+		if len(p1) == 0 || len(p2) == 0 {
+			break
+		}
+		if len(p1) > p1[0] && len(p2) > p2[0] {
+			// I learned a painful lesson about slice internals here
+			p1a := make([]int, p1[0])
+			p2a := make([]int, p2[0])
+			copy(p1a, p1[1:p1[0]+1])
+			copy(p2a, p2[1:p2[0]+1])
+
+			p1a, p2a = recurse(p1a, p2a)
+			if len(p1a) > len(p2a) {
+				p1 = append(p1[1:], p1[0], p2[0])
+				p2 = p2[1:]
+			} else {
+				p2 = append(p2[1:], p2[0], p1[0])
+				p1 = p1[1:]
+			}
+		} else {
+			p1, p2 = play(p1, p2)
+		}
+	}
+	return p1, p2
+}
+
+func play(p1, p2 []int) ([]int, []int) {
+	// hopefully we never draw?
+	if p1[0] > p2[0] {
+		p1 = append(p1[1:], p1[0], p2[0])
+		p2 = p2[1:]
+	} else {
+		p2 = append(p2[1:], p2[0], p1[0])
+		p1 = p1[1:]
+	}
+	return p1, p2
+}
+
+func score(deck []int) int {
+	result := 0
+	for i := 1; i <= len(deck); i++ {
+		result += deck[len(deck)-i] * i
+	}
+	return result
 }
 
 func parse(input []string) ([]int, []int) {
